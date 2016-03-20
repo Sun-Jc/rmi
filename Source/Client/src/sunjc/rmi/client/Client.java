@@ -8,6 +8,13 @@ import java.rmi.registry.Registry;
 
 public class Client {
 
+    /**
+     * Fixed Params
+     **/
+    static final int SUC = 0;
+    static final int FAILED = -1;
+    /** End: Fixed Params**/
+
     public static void main(String[] args) {
         String clientName;
         String hostLocation;
@@ -36,10 +43,10 @@ public class Client {
             System.out.println("sending Mr Job");
 
             int key = s.apply(clientName);
-            Data y = s.execute( MrJob , key);
-
-            System.out.println("Mr Job returned, with " + y.dataType + y.value);
-            //System.out.println("Mr Job returned, with " + 1);
+            if (key != FAILED) {
+                Data y = s.execute(MrJob, key);
+                System.out.println("Mr Job returned, with " + y.dataType + y.value);
+            }
 
         } catch (Exception e) {
             System.err.println("Client exception encountered:");

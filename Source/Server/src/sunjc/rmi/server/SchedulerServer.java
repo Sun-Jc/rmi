@@ -7,6 +7,9 @@ import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ *  TBD: Client interface, interact double directionly
+ */
 
 /**
  * Created by SunJc on Mar/20/16.
@@ -132,6 +135,12 @@ public class SchedulerServer extends CentralNode {
                                         availableServers.add(s);
                                     }
                                 }
+                                if (availableServers.isEmpty()){
+                                    synchronized (availableServers){
+                                        if (availableServers.isEmpty())
+                                            availableServers.wait();
+                                    }
+                                }
                             }
                         }else {
                             synchronized (jobs){
@@ -202,7 +211,10 @@ public class SchedulerServer extends CentralNode {
             res = pickedServer.execute(job, password);
             afterExecutePrompt(nodes.get(pickedServer), job.getName());
             // return
-            availableServers.add(pickedServer);
+            synchronized (availableServers) {
+                availableServers.add(pickedServer);
+                availableServers.notify();
+            }
         } catch (Exception e) {
             System.err.println(name + ": Job passing exception encountered:");
             e.printStackTrace();

@@ -150,7 +150,7 @@ public class Executor implements Service {
             Date now = new Date();
             if(now.getTime()-startTime.getTime() > maxWaitingTime){
                 currentState = availableState;
-                return availableState.apply(s);
+                return this.apply(s);
             }else {
                 return FAILED;
             }
@@ -172,15 +172,19 @@ public class Executor implements Service {
             // need client access checking
             if (key == this.key) {
                 currentState = executingState;
-                return executingState.execute(job,key);
+                executingState.setKey(key);
+                return this.execute(job, key);
             }else {
                 throw new IllegalStateException();
             }
 
         }
-    };
+    }
 
-    private Service executingState = new Service() {
+    private ExecutingState executingState = new ExecutingState();
+    class ExecutingState implements Service {
+        int key;
+        void setKey(int k){ key = k;}
         @Override
         public int apply(String s) throws RemoteException {
             return FAILED;
@@ -192,7 +196,9 @@ public class Executor implements Service {
         }
 
         @Override
-        public <T> T execute(Job<T> job, int key) throws RemoteException {
+        public <T> T execute(Job<T> job, int k) throws RemoteException {
+            if (key != k)
+                throw new IllegalStateException();
             jobHistory.pop();
             jobHistory.push(job);
             beforeExecutePrompt(job.getName());
