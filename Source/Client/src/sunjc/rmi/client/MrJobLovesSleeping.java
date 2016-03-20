@@ -15,13 +15,13 @@ public class MrJobLovesSleeping extends Job<Data>{
 
     public MrJobLovesSleeping(String nameOfMrJob, int sleepTime){
         super(nameOfMrJob);
-        time = sleepTime;
+        time = sleepTime * 1000;
     }
 
     @Override
     public Data doIt() {
         try {
-            Thread.sleep(100);
+            Thread.sleep(time);
         }catch (Exception e){
             System.out.println("Mr.Job has trouble sleeping");
             e.printStackTrace();

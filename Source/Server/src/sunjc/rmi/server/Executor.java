@@ -47,8 +47,15 @@ public class Executor implements Service {
     }
 
     Stack<Job> jobHistory = new Stack<Job>();
+    public Stack<String> getJobHistory(){
+        Stack<String> str = new Stack<>();
+        for (Job j: jobHistory){
+            str.add(j.getName());
+        }
+        return str;
+    }
     Stack<String> clientHistory = new Stack<>();
-    public Stack<String> getClientHisttory(){
+    public Stack<String> getClientHistory(){
         return clientHistory;
     }
     Job jobPlaceHolder = new Job("job place holder") {
@@ -62,27 +69,27 @@ public class Executor implements Service {
 
     /** Region: hooks **/
     private void someoneAsksPrompt(String client){
-        System.out.println(name + ":" + client + " applies");
+        System.out.println(name + ": " + client + " applies");
     }
 
     private void someoneAsksQueuePrompt(String client){
-        System.out.println(name + ":" + client + "         and queues");
+        System.out.println(name + ": " + client + "         and queues");
     }
 
     private void someoneAsksFailedPrompt(String client){
-        System.out.println(name + ":" + client + "                     and fails");
+        System.out.println(name + ": " + client + "                     and fails");
     }
 
     private void someoneAsksSuccessPrompt(String client){
-        System.out.println(name + ":" + client + "                               and successes");
+        System.out.println(name + ": " + client + "                    and successes");
     }
 
     private void beforeExecutePrompt(String job){
-        System.out.println(name + ":" + "executing " + job);
+        System.out.println(name + ": " + "executing " + job);
     }
 
     private void afterExecutePrompt(String job){
-        System.out.println(name + ":" + job + " done.");
+        System.out.println(name + ": " + job + " done.");
     }
     /** End of Region: hooks **/
 

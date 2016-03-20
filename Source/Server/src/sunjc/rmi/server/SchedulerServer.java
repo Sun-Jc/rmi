@@ -4,10 +4,7 @@ import sunjc.rmi.shared.Job;
 import sunjc.rmi.shared.Service;
 
 import java.rmi.RemoteException;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 
@@ -59,7 +56,7 @@ public class SchedulerServer extends CentralNode {
      * Region: Prompts
      **/
     private void someoneComes(String client) {
-        System.out.println(name + ":" + client + " comes");
+        System.out.println(name + ": " + client + " comes");
     }
 
     private void jobWaitsForExecutor(String job) {
@@ -88,13 +85,14 @@ public class SchedulerServer extends CentralNode {
      * Region: Strategy
      **/
 
-    ConcurrentLinkedQueue<Service> availableServers = new ConcurrentLinkedQueue<>();
+    HashSet<Service> availableServers = new HashSet<>();
 
     @Override
     public void addServer(Service s, String name) {
         super.addServer(s, name);
         availableServers.add(s);
     }
+
 
     private void beginSchedulerThread() {
         Thread scheduling = new Thread() {
@@ -125,15 +123,22 @@ public class SchedulerServer extends CentralNode {
                                     synchronized (pickedJob) {
                                         pickedJob.notify();
                                     }
+                                    Thread.yield();
                                 }
                             } else {
+                                // poll over, very busy
                                 for (Service s : nodes.keySet()) {
                                     if (!s.isBusy()) {
                                         availableServers.add(s);
                                     }
                                 }
                             }
-
+                        }else {
+                            synchronized (jobs){
+                                if (jobs.isEmpty()){
+                                    jobs.wait();
+                                }
+                            }
                         }
                     }
                 } catch (Exception e) {
@@ -166,7 +171,10 @@ public class SchedulerServer extends CentralNode {
 
         // wait, watch this order
         synchronized (job) {
-            jobs.add(job);
+            synchronized (jobs){
+                jobs.add(job);
+                jobs.notify();
+            }
             try {
                 jobWaitsForExecutor(job.getName());
                 job.wait();
@@ -187,11 +195,14 @@ public class SchedulerServer extends CentralNode {
             password = appliedKeys.remove(0);
         }
 
+        // Executing
         T res = null;
         try {
             beforeExecutePrompt(nodes.get(pickedServer), job.getName());
             res = pickedServer.execute(job, password);
             afterExecutePrompt(nodes.get(pickedServer), job.getName());
+            // return
+            availableServers.add(pickedServer);
         } catch (Exception e) {
             System.err.println(name + ": Job passing exception encountered:");
             e.printStackTrace();

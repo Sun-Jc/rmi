@@ -27,7 +27,6 @@ public class Client {
 
         if (null == System.getSecurityManager()) {
             System.setSecurityManager(new SecurityManager());
-            System.out.println("new SecurityManager");
         }
         try {
             Job<Data> MrJob = new MrJobLovesSleeping(jobName, sleepTime);
@@ -39,8 +38,8 @@ public class Client {
             int key = s.apply(clientName);
             Data y = s.execute( MrJob , key);
 
-            //System.out.println("Mr Job returned, with " + y.dataType + y.value);
-            System.out.println("Mr Job returned, with " + 1);
+            System.out.println("Mr Job returned, with " + y.dataType + y.value);
+            //System.out.println("Mr Job returned, with " + 1);
 
         } catch (Exception e) {
             System.err.println("Client exception encountered:");

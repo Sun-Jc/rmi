@@ -1,41 +1,138 @@
+# CLEAN:
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/
 find . -name "*.class"  | xargs rm
 find . -name "*.jar"  | xargs rm
 
 
 
 
+
+# BASE COMPILING:
+
 cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Shared/src
-
 javac sunjc/rmi/shared/*.java
-
 jar cvf ../../../Lib/util.jar sunjc/rmi/shared/*.class
 
 
 
+# COMPILE SERVER:
 
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+javac -cp ../../../Lib/util.jar sunjc/rmi/server/*.java
+
+
+
+
+
+# RUN CENTER AT SRC:
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main c Mars
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main c Venus
+
+
+
+
+
+# RUN EXECUTOR AT SRC:
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main e Alpha
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main e Beta
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main e Gamma
+
+
+2
+127.0.0.1 Alpha
+Y
+2
+127.0.0.1 Beta
+Y
+2
+127.0.0.1 Gamma
+Y
+
+
+
+
+
+
+# COMPILE CLIENT:
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Client/src
+javac -cp ../../../Lib/util.jar sunjc/rmi/client/*.java
+jar cvf /Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar sunjc/rmi/client/MrJobLovesSleeping.class sunjc/rmi/client/Data.class 
+
+
+
+
+# RUN CLIENT AT SRC
+
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrJobHome 127.0.0.1 Mars jobForM 5
+
+java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrJobHome 127.0.0.1 Venus jobForV 500
+
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+# RMI REGISTRY:
 
 lsof -i tcp:1099
 
 rmiregistry -J-Djava.rmi.server.useCodebaseOnly=false &
 
 
+# REBUILD: CLEAN AND ALL COMPILE THEN MOVE TO BIN:
 
+cd /Users/SunJc/Desktop/OO/RemoteCalling/
+find . -name "*.class"  | xargs rm
+find . -name "*.jar"  | xargs rm
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Shared/src
+javac sunjc/rmi/shared/*.java
+jar cvf ../../../Lib/util.jar sunjc/rmi/shared/*.class
+rm sunjc/rmi/shared/*.class
 
 cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
-
 javac -cp ../../../Lib/util.jar sunjc/rmi/server/*.java
 
-java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main c Mars
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Client/src
+javac -cp ../../../Lib/util.jar sunjc/rmi/client/*.java
+jar cvf /Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar sunjc/rmi/client/MrJobLovesSleeping.class sunjc/rmi/client/Data.class 
 
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Server/src
+mkdir -p ../../../Bin/sunjc/rmi/server/
+find . -name "*.class"  |  xargs -I {} mv {} ../../../Bin/sunjc/rmi/server/
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Client/src
+mkdir -p ../../../Bin/sunjc/rmi/client/
+find . -name "*.class"  |  xargs -I {} mv {} ../../../Bin/sunjc/rmi/client/
+
+
+
+# RUN CENTER AT BIN
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Bin/
+java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main c Mars
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Bin/
+java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main c Venus
+
+
+# RUN EXECUTOR AT BIN
+
+cd /Users/SunJc/Desktop/OO/RemoteCalling/Bin/
 java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Lib/util.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.hostname=127.0.0.1 -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.server.Main e Alpha
 
 
 
-
-cd /Users/SunJc/Desktop/OO/RemoteCalling/Source/Client/src
-
-javac -cp ../../../Lib/util.jar sunjc/rmi/client/*.java
-
-jar cvf /Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar sunjc/rmi/client/MrJobLovesSleeping.class sunjc/rmi/client/Data.class 
-
-java -cp ../../../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrJobHome 127.0.0.1 alpha job1 3
