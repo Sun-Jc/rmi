@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9f9d9597-aa5a-49f5-b321-438f47f5b538" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/DistributorWithSchedulerStrategy.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/DistributorWithSchedulerStrategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" />
-    </list>
+    <list default="true" id="9f9d9597-aa5a-49f5-b321-438f47f5b538" name="Default" comment="" />
     <ignored path="Client.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
