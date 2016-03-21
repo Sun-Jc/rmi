@@ -1,6 +1,6 @@
-# Experiments on remote method invocation, inspired by Java Tutorial of RIM
-A simple compute engine, running in distributed environment, executing users computing task.
-
+#A simple compute engine, running in distributed environment, executing users computing task.
+Experiments on remote method invocation, inspired by Java Tutorial of RIM
+ 
 1. There're three roles: client who submits the task to a server node; distributor(server node) who distributes the incoming tasks to server nodes of next level, with some scheduling/distribution strategy; executor(server node) who executes the incoming task. One JVM runs only one distributor simutanously. One executor executes only one task simutanously.
 2. Multi level scheduling is supported
            DistributorX
