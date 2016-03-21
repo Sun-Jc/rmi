@@ -1,12 +1,14 @@
 package sunjc.rmi.client;
 
 import sunjc.rmi.shared.Job;
+import sunjc.rmi.shared.NotifyReceiver;
 import sunjc.rmi.shared.Service;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class Client {
+public class Client implements NotifyReceiver{
 
     /**
      * Fixed Params
@@ -43,7 +45,8 @@ public class Client {
             System.out.println("sending Mr Job");
 
             int key = s.apply(clientName);
-            if (key != FAILED) {
+
+            if (key == FAILED) {
                 Data y = s.execute(MrJob, key);
                 System.out.println("Mr Job returned, with " + y.dataType + y.value);
             }
@@ -52,5 +55,12 @@ public class Client {
             System.err.println("Client exception encountered:");
             e.printStackTrace();
         }
+    }
+
+    static Boolean FLAG = false;
+
+    @Override
+    public void onRemoteEvent(String s) throws RemoteException {
+
     }
 }

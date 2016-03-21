@@ -3,8 +3,11 @@ import sunjc.rmi.shared.Job;
 import sunjc.rmi.shared.Service;
 
 import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created by SunJc on Mar/20/16.
@@ -20,10 +23,14 @@ public abstract class CentralNode implements Service {
         return name;
     }
 
-    protected Stack<String> clientHistory = new Stack<>();
+    protected ConcurrentLinkedQueue<String> clientHistory = new ConcurrentLinkedQueue<>();
 
     public Stack<String> getClientHistory(){
-        return clientHistory;
+        Stack<String> stack = new Stack<>();
+        for (String s: clientHistory){
+            stack.push(s);
+        }
+        return stack;
     }
 
     protected Hashtable<Service,String> nodes = nodesFactory();

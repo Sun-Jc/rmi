@@ -5,16 +5,54 @@ import sunjc.rmi.shared.Service;
 
 import java.rmi.RemoteException;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
- *  TBD: Client interface, interact double directionly
+ *  TBD: 1. Client interface, interact double directionly
+ *       2. Multi-level scheduler
+ */
+
+/**
+ * ****************************************************************************
+ *  Critical Resources:
+ *      Mutual and solved by java thread safe type:
+ *              clientHistory, apply(add, x) - apply(add, x)
+ *              availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
+ *                   add in outer thread doesn't affect check empty or remove logic in SchedulerThread
+ *              jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
+ *                   add in outer thread doesn't affect SchedulerThread check or remove logic
+ *      Mutual and needn't be java thread safe type:
+ *
+ *              nodes, addServer(add, 1) - SchedulerThread(search, 1) - execute(fetch, x)
+ *                         no removing, add in outer thread doesn't affect searching
+ *      Mutual and can't be solved by java thread safe type:
+ *              appliedKeys; appliedServers, SchedulerThread(1, add)- execute(x, remove)
+ *                          pair, java thread safe version doesn't help mutual case
+ *     Sync:
+ *              2.3.4.
+ ******************************************************************************************************************
+ *  Sync block:
+ *  1. Singleton: unique instance, mutual, getInstance()-getInstance()
+ *
+ *  Queuing Agent
+ *  2. Job block itself until server applied, sync, execute()-SchedulingTread
+ *
+ *  Consumer - Producer
+ *  3. Scheduler block itself until job comes in, sync, execute()-SchedulingTread
+ *  4. Scheduler block itself if job waiting until other job comes out, sync, execute()-SchedulingTread
+ *
+ *  5. Server picker of job, mutual pairs
+ *
+ *
+ *
+ *
+ *
  */
 
 /**
  * Created by SunJc on Mar/20/16.
  */
-public class SchedulerServer extends CentralNode {
+public class SchedulerServerFIFO extends CentralNode {
     /**
      * Fixed Params
      **/
@@ -26,13 +64,13 @@ public class SchedulerServer extends CentralNode {
     /**
      * Region: Singleton
      **/
-    private volatile static SchedulerServer uniqueInstance;
+    private volatile static SchedulerServerFIFO uniqueInstance;
 
-    public static SchedulerServer getInstance() {
+    public static SchedulerServerFIFO getInstance() {
         if (uniqueInstance == null) {
             synchronized (Executor.class) {
                 if (uniqueInstance == null) {
-                    uniqueInstance = new SchedulerServer();
+                    uniqueInstance = new SchedulerServerFIFO();
                     uniqueInstance.beginSchedulerThread();
                 }
             }
@@ -40,29 +78,19 @@ public class SchedulerServer extends CentralNode {
         return uniqueInstance;
     }
 
-    private SchedulerServer() {
+    private SchedulerServerFIFO() {
     }
     /** End of Region: Singleton **/
 
 
     /**
-     * Region: Factory
-     **/
-    @Override
-    protected AbstractCollection jobsFactory() {
-        return new ConcurrentLinkedQueue<Job>();
-    }
-    /** End of Region: Factory **/
-
-
-    /**
      * Region: Prompts
      **/
-    private void someoneComes(String client) {
+    private void someoneComesPrompt(String client) {
         System.out.println(name + ": " + client + " comes");
     }
 
-    private void jobWaitsForExecutor(String job) {
+    private void jobWaitsForExecutorPrompt(String job) {
         System.out.println(name + ": " + job + " queuing...");
     }
 
@@ -73,7 +101,7 @@ public class SchedulerServer extends CentralNode {
     private void afterExecutePrompt(String server, String job) {
         System.out.println(name + ": " + server + " done with " + job);
     }
-    /** End of Region: hooks **/
+    /** End of Region: Prompts **/
 
 
     /**
@@ -88,7 +116,12 @@ public class SchedulerServer extends CentralNode {
      * Region: Strategy
      **/
 
-    HashSet<Service> availableServers = new HashSet<>();
+    @Override
+    protected AbstractCollection jobsFactory() {
+        return new ArrayList<>();
+    }
+
+    ConcurrentSkipListSet<Service> availableServers = new ConcurrentSkipListSet<>();
 
     @Override
     public void addServer(Service s, String name) {
@@ -96,6 +129,10 @@ public class SchedulerServer extends CentralNode {
         availableServers.add(s);
     }
 
+    public static class PickedServerAndJob{
+        public Job job;
+        public Service server;
+    }
 
     private void beginSchedulerThread() {
         Thread scheduling = new Thread() {
@@ -121,8 +158,10 @@ public class SchedulerServer extends CentralNode {
 
                                 if (key != FAILED) {
                                     pickedJob = ((Queue<Job>) jobs).poll();
-                                    appliedServers.add(pickedServer);
-                                    appliedKeys.add(key);
+                                    synchronized (appliedServers) {
+                                        appliedServers.add(pickedServer);
+                                        appliedKeys.add(key);
+                                    }
                                     synchronized (pickedJob) {
                                         pickedJob.notify();
                                     }
@@ -162,8 +201,8 @@ public class SchedulerServer extends CentralNode {
 
     @Override
     public int apply(String s) throws RemoteException {
-        someoneComes(s);
-        clientHistory.push(s);
+        someoneComesPrompt(s);
+        clientHistory.add(s);
         return SUC;
     }
 
@@ -185,7 +224,7 @@ public class SchedulerServer extends CentralNode {
                 jobs.notify();
             }
             try {
-                jobWaitsForExecutor(job.getName());
+                jobWaitsForExecutorPrompt(job.getName());
                 job.wait();
             } catch (Exception e) {
                 System.err.println(name + ": Job waiting exception encountered:");

@@ -5,8 +5,7 @@ import sunjc.rmi.shared.Service;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
 
@@ -64,7 +63,7 @@ public class Main {
                 }
 
             } else if (args[0].toLowerCase().equals("c")) {
-                CentralNode center = SchedulerServer.getInstance();
+                CentralNode center = SchedulerServerFIFO.getInstance();
                 center.setName(args[1]);
 
                 Service stubInstance = (Service) UnicastRemoteObject.exportObject(center,0);
@@ -118,7 +117,7 @@ public class Main {
         }
     }
 
-    static void dispHistory(Stack<String> s, String historyName){
+    static void dispHistory(AbstractList<String> s, String historyName){
         System.out.println(historyName+":");
         for (int i = 0; i < s.size(); i++) {
             System.out.println(i + " : " + s.get(i));
