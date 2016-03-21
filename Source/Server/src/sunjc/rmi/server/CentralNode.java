@@ -41,6 +41,7 @@ public abstract class CentralNode implements Service {
     }
     protected abstract AbstractCollection<Job> jobsFactory();
 
+    // only invoked by single thread manager
     public void addServer(Service s, String serverName){
         nodes.put(s,serverName);
     }

@@ -28,8 +28,8 @@ public class FIFOScheduler implements Strategy {
 
 
     @Override
-    public SchedulerServerFIFO.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service,String> servers, AbstractCollection jobs) {
-        SchedulerServerFIFO.PickedServerAndJob res = new SchedulerServerFIFO.PickedServerAndJob();
+    public SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service,String> servers, AbstractCollection jobs) {
+        SchedulerServer.PickedServerAndJob res = new SchedulerServer.PickedServerAndJob();
         // Pick up one server if available
         if (!availableServers.isEmpty()) {
             Iterator<Service> it = availableServers.iterator();
@@ -79,21 +79,13 @@ public class FIFOScheduler implements Strategy {
     }
 
     @Override
-    public void strategyChangedToThis(Hashtable<Service,String> servers, AbstractCollection jobs) {
+    public void strategyChangedToThis(Hashtable<Service,String> servers) {
         try{
             for (Service s : servers.keySet()) {
                 if (!s.isBusy()) {
                     availableServers.add(s);
                 }
             }
-
-            AbstractCollection newJobsCollection = jobsCollectionFactory();
-            Job[] js = (Job[])jobs.toArray(new Job[jobs.size()]);
-            for (Job j: js){
-                newJobsCollection.add(j);
-            }
-            jobs = newJobsCollection;
-
         }catch (Exception e){
             System.out.println("FIFO strategy changed Exception encountered");
             e.printStackTrace();

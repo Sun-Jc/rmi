@@ -63,7 +63,7 @@ public class Main {
                 }
 
             } else if (args[0].toLowerCase().equals("c")) {
-                CentralNode center = SchedulerServerFIFO.getInstance();
+                CentralNode center = SchedulerServer.getInstance();
                 center.setName(args[1]);
 
                 Service stubInstance = (Service) UnicastRemoteObject.exportObject(center,0);

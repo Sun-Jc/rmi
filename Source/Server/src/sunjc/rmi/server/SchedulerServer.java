@@ -4,12 +4,42 @@ import sunjc.rmi.shared.Job;
 import sunjc.rmi.shared.Service;
 
 import java.rmi.RemoteException;
-import java.util.*;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.AbstractCollection;
+import java.util.ArrayList;
 
 /**
- *  TBD: 1. Client interface, interact double directionly
- *       2. Multi-level scheduler
+ * TBD: 1. Client interface, interact double directionly
+ * 2. Multi-level scheduler
+ * <p>
+ * ****************************************************************************
+ * Critical Resources:
+ * Mutual and solved by java thread safe type:
+ * clientHistory, apply(add, x) - apply(add, x)
+ * availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
+ * add in outer thread doesn't affect check empty or remove logic in SchedulerThread
+ * jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
+ * add in outer thread doesn't affect SchedulerThread check or remove logic
+ * Mutual and needn't be java thread safe type:
+ * <p>
+ * nodes, addServer(add, 1) - SchedulerThread(search, 1) - execute(fetch, x)
+ * no removing, add in outer thread doesn't affect searching
+ * Mutual and can't be solved by java thread safe type:
+ * appliedKeys; appliedServers, SchedulerThread(1, add)- execute(x, remove)
+ * pair, java thread safe version doesn't help mutual case
+ * Sync:
+ * 2.3.4.
+ * *****************************************************************************************************************
+ * Sync block:
+ * 1. Singleton: unique instance, mutual, getInstance()-getInstance()
+ * <p>
+ * Queuing Agent
+ * 2. Job block itself until server applied, sync, execute()-SchedulingTread
+ * <p>
+ * Consumer - Producer
+ * 3. Scheduler block itself until job comes in, sync, execute()-SchedulingTread
+ * 4. Scheduler block itself if job waiting until other job comes out, sync, execute()-SchedulingTread
+ * <p>
+ * 5. Server picker of job, mutual pairs
  */
 
 /**
@@ -52,7 +82,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 /**
  * Created by SunJc on Mar/20/16.
  */
-public class SchedulerServerFIFO extends CentralNode {
+public class SchedulerServer extends CentralNode {
     /**
      * Fixed Params
      **/
@@ -64,13 +94,13 @@ public class SchedulerServerFIFO extends CentralNode {
     /**
      * Region: Singleton
      **/
-    private volatile static SchedulerServerFIFO uniqueInstance;
+    private volatile static SchedulerServer uniqueInstance;
 
-    public static SchedulerServerFIFO getInstance() {
+    public static SchedulerServer getInstance() {
         if (uniqueInstance == null) {
             synchronized (Executor.class) {
                 if (uniqueInstance == null) {
-                    uniqueInstance = new SchedulerServerFIFO();
+                    uniqueInstance = new SchedulerServer();
                     uniqueInstance.beginSchedulerThread();
                 }
             }
@@ -78,7 +108,7 @@ public class SchedulerServerFIFO extends CentralNode {
         return uniqueInstance;
     }
 
-    private SchedulerServerFIFO() {
+    private SchedulerServer() {
     }
     /** End of Region: Singleton **/
 
@@ -112,93 +142,8 @@ public class SchedulerServerFIFO extends CentralNode {
     /** End of Region: Properties **/
 
 
-    /**
-     * Region: Strategy
-     **/
 
-    @Override
-    protected AbstractCollection jobsFactory() {
-        return new ArrayList<>();
-    }
-
-    ConcurrentSkipListSet<Service> availableServers = new ConcurrentSkipListSet<>();
-
-    @Override
-    public void addServer(Service s, String name) {
-        super.addServer(s, name);
-        availableServers.add(s);
-    }
-
-    public static class PickedServerAndJob{
-        public Job job;
-        public Service server;
-    }
-
-    private void beginSchedulerThread() {
-        Thread scheduling = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    while (true) {
-                        if (!jobs.isEmpty()) {
-
-                            // pick a server to the head of list
-                            // acquiring a chance of executing
-                            // unique thread handling scheduling, synchronized not needed
-                            if (!availableServers.isEmpty()) {
-                                Service pickedServer = null;
-                                Job pickedJob;
-                                int key = FAILED;
-
-                                Iterator<Service> it = availableServers.iterator();
-                                pickedServer = it.next();
-                                availableServers.remove(pickedServer);
-                                key = pickedServer.apply(name);
-
-                                if (key != FAILED) {
-                                    pickedJob = ((Queue<Job>) jobs).poll();
-                                    synchronized (appliedServers) {
-                                        appliedServers.add(pickedServer);
-                                        appliedKeys.add(key);
-                                    }
-                                    synchronized (pickedJob) {
-                                        pickedJob.notify();
-                                    }
-                                    Thread.yield();
-                                }
-                            } else {
-                                // poll over, very busy
-                                for (Service s : nodes.keySet()) {
-                                    if (!s.isBusy()) {
-                                        availableServers.add(s);
-                                    }
-                                }
-                                if (availableServers.isEmpty()){
-                                    synchronized (availableServers){
-                                        if (availableServers.isEmpty())
-                                            availableServers.wait();
-                                    }
-                                }
-                            }
-                        }else {
-                            synchronized (jobs){
-                                if (jobs.isEmpty()){
-                                    jobs.wait();
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    System.err.println("Scheduler exception encountered:");
-                    e.printStackTrace();
-                }
-
-            }
-        };
-        scheduling.start();
-    }
-
+    /** Region: without strategy methods */
     @Override
     public int apply(String s) throws RemoteException {
         someoneComesPrompt(s);
@@ -210,6 +155,85 @@ public class SchedulerServerFIFO extends CentralNode {
     public boolean isBusy() throws RemoteException {
         return false;
     }
+    /** End of Region: without strategy methods */
+
+
+
+    /**
+     * Region: Strategy
+     **/
+
+    static Strategy DEAFULT_STRATEGY = new FIFOScheduler();
+
+    Strategy strategy = DEAFULT_STRATEGY;
+
+    // rarely used
+    public void changeStrategy() {
+        while (!jobs.isEmpty()) ;
+        strategy.strategyChangedToThis(nodes);
+    }
+
+    @Override
+    protected AbstractCollection jobsFactory() {
+        return strategy.jobsCollectionFactory();
+    }
+
+    @Override
+    public void addServer(Service s, String name) {
+        super.addServer(s, name);
+        strategy.serverAddedAction(s);
+    }
+
+    public static class PickedServerAndJob {
+        public Job job;
+        public Service server;
+    }
+
+    private Thread scheduling = new Thread() {
+        @Override
+        public void run() {
+            super.run();
+            try {
+                while (true) {
+                    if (!jobs.isEmpty()) {
+
+                        PickedServerAndJob picked = strategy.pickServerAndJobIfJobNotExecuted(nodes, jobs);
+                        if (picked.server != null) {
+                            int key = picked.server.apply(name);
+                            if (key != FAILED) {
+                                jobs.remove(picked.job);
+
+                                synchronized (appliedServers) {
+                                    appliedServers.add(picked.server);
+                                    appliedKeys.add(key);
+                                }
+
+                                synchronized (picked.job) {
+                                    picked.job.notify();
+                                }
+
+                                Thread.yield();
+                            }
+                        }
+                    } else {
+                        synchronized (jobs) {
+                            if (jobs.isEmpty()) {
+                                jobs.wait();
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Scheduler exception encountered:");
+                e.printStackTrace();
+            }
+
+        }
+    };
+
+    private void beginSchedulerThread() {
+        scheduling.start();
+    }
 
     @Override
     public <T> T execute(Job<T> job, int key) throws RemoteException {
@@ -219,8 +243,8 @@ public class SchedulerServerFIFO extends CentralNode {
 
         // wait, watch this order
         synchronized (job) {
-            synchronized (jobs){
-                jobs.add(job);
+            synchronized (jobs) {
+                strategy.addJobToCollection(jobs,job);
                 jobs.notify();
             }
             try {
@@ -249,11 +273,7 @@ public class SchedulerServerFIFO extends CentralNode {
             beforeExecutePrompt(nodes.get(pickedServer), job.getName());
             res = pickedServer.execute(job, password);
             afterExecutePrompt(nodes.get(pickedServer), job.getName());
-            // return
-            synchronized (availableServers) {
-                availableServers.add(pickedServer);
-                availableServers.notify();
-            }
+            strategy.afterExecution(pickedServer,job);
         } catch (Exception e) {
             System.err.println(name + ": Job passing exception encountered:");
             e.printStackTrace();
