@@ -8,11 +8,11 @@ import java.io.Serializable;
 public abstract class Job<T> implements Serializable {
     String name = "default job name";
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public Job(String name){
+    public Job(String name) {
         this.name = name;
     }
 

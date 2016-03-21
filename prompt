@@ -121,6 +121,7 @@ find . -name "*.class"  |  xargs -I {} mv {} ../../../Bin/sunjc/rmi/client/
 
 
 
+
 # RUN EXECUTOR AT BIN:
 
 cd /Users/SunJc/Desktop/OO/RemoteCalling/Bin/
@@ -166,7 +167,7 @@ java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop
 
 
 
-java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrsJobHome 127.0.0.1 Mars job4 6 &
+java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrsJobHome 127.0.0.1 Venus job4 6 &
 
 java -cp ../Lib/util.jar: -Djava.rmi.server.codebase=file:///Users/SunJc/Desktop/OO/RemoteCalling/Jobs/jobz.jar -Djava.security.policy=/Users/SunJc/Desktop/OO/RemoteCalling/Lib/all.policy -Djava.rmi.server.useCodebaseOnly=false sunjc.rmi.client.Client MrsJobHome 127.0.0.1 Mars job5 6 &
 

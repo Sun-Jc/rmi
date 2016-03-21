@@ -5,32 +5,33 @@ import sunjc.rmi.shared.Service;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        if (args.length < 2){
+        if (args.length < 2) {
             System.out.println("Usages: -type of server (e or c) -server name(s)");
             return;
         }
 
-        if(null == System.getSecurityManager()) {
+        if (null == System.getSecurityManager()) {
             System.setSecurityManager(new SecurityManager());
         }
 
         try {
             if (args[0].toLowerCase().equals("e")) {
-                String[] serverNames = new String[args.length-1];
-                Executor[] executors = new Executor[args.length-1];
+                String[] serverNames = new String[args.length - 1];
+                Executor[] executors = new Executor[args.length - 1];
                 for (int i = 0; i < args.length - 1; i++) {
-                    serverNames[i] = args[i+1];
+                    serverNames[i] = args[i + 1];
 
                     Executor executor = new Executor();
                     executors[i] = executor;
                     executor.setName(serverNames[i]);
 
-                    Service stubInstance = (Service) UnicastRemoteObject.exportObject(executor,0);
+                    Service stubInstance = (Service) UnicastRemoteObject.exportObject(executor, 0);
                     Registry reg = LocateRegistry.getRegistry();
                     reg.rebind(serverNames[i], stubInstance);
 
@@ -45,16 +46,16 @@ public class Main {
                         System.out.println("whose?");
                         String name = in.next().toLowerCase();
                         for (int i = 0; i < serverNames.length; i++) {
-                            if(name.equals(serverNames[i])){
+                            if (name.equals(serverNames[i].toLowerCase())) {
                                 dispHistory(executors[i].getClientHistory(), "Clients who visited");
                                 break;
                             }
                         }
-                    }else if (input.equals("2")){
+                    } else if (input.equals("2")) {
                         System.out.println("whose?");
                         String name = in.next().toLowerCase();
                         for (int i = 0; i < serverNames.length; i++) {
-                            if(name.equals(serverNames[i])){
+                            if (name.equals(serverNames[i].toLowerCase())) {
                                 dispHistory(executors[i].getJobHistory(), "Ever running jobs");
                                 break;
                             }
@@ -66,7 +67,7 @@ public class Main {
                 CentralNode center = SchedulerServer.getInstance();
                 center.setName(args[1]);
 
-                Service stubInstance = (Service) UnicastRemoteObject.exportObject(center,0);
+                Service stubInstance = (Service) UnicastRemoteObject.exportObject(center, 0);
                 Registry reg = LocateRegistry.getRegistry();
                 reg.rebind(args[1], stubInstance);
 
@@ -74,7 +75,7 @@ public class Main {
 
 
                 String[] names = {"Alpha", "Beta", "Gamma"};
-                for (String s: names) {
+                for (String s : names) {
                     Registry regForE = LocateRegistry.getRegistry("127.0.0.1");
                     Service executor = (Service) reg.lookup(s);
                     center.addServer(executor, s);
@@ -83,13 +84,12 @@ public class Main {
 
 
                 Scanner in = new Scanner(System.in);
-                while (true){
+                while (true) {
                     System.out.println("Manager: What are you going to do? 1. View Client History 2. Add new executors");
                     String input = in.next();
-                    if (input.equals("1")){
-                        dispHistory(center.getClientHistory(),"Clients who visited");
-                    }
-                    else if (input.equals("2")) {
+                    if (input.equals("1")) {
+                        dispHistory(center.getClientHistory(), "Clients who visited");
+                    } else if (input.equals("2")) {
 
                         System.out.println("Manager: Ready to add new executors for Scheduler: -host name -service name");
                         String hostLocation = in.next();
@@ -111,14 +111,14 @@ public class Main {
             } else {
                 System.out.println("no such server");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Manager exception encountered:");
             e.printStackTrace();
         }
     }
 
-    static void dispHistory(AbstractList<String> s, String historyName){
-        System.out.println(historyName+":");
+    static void dispHistory(AbstractList<String> s, String historyName) {
+        System.out.println(historyName + ":");
         for (int i = 0; i < s.size(); i++) {
             System.out.println(i + " : " + s.get(i));
         }

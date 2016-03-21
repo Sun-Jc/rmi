@@ -2,19 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9f9d9597-aa5a-49f5-b321-438f47f5b538" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServerFIFO$1.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServerFIFO.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/NotifyReceiver.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/CentralNode.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/CentralNode.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Client.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Client.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Data.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Data.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$1.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$2.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ExecutingState.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ExecutingState.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ReadyToExecuteState.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ReadyToExecuteState.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/FIFOScheduler.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/FIFOScheduler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Main.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/MrJobLovesSleeping.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/MrJobLovesSleeping.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$1.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$PickedServerAndJob.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$PickedServerAndJob.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Jobs/jobz.jar" afterPath="$PROJECT_DIR$/../../Jobs/jobz.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Lib/util.jar" afterPath="$PROJECT_DIR$/../../Lib/util.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/CentralNode.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/CentralNode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/Data.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/Data.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Executor.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Executor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/Job.java" afterPath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/Job.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/SchedulerServer.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/SchedulerServer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Server/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Shared/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Shared/.idea/workspace.xml" />
     </list>
     <ignored path="Client.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,11 +53,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.60402685">
-              <caret line="46" column="42" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -58,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MrJobLovesSleeping.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MrJobLovesSleeping.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.67785233">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -83,9 +100,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" />
         <option value="$PROJECT_DIR$/src/sunjc/rmi/client/Data.java" />
         <option value="$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java" />
-        <option value="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" />
       </list>
     </option>
   </component>
@@ -162,8 +179,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -282,8 +299,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="742" extended-state="1" />
-    <editor active="false" />
+    <frame x="0" y="23" width="1280" height="742" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -350,11 +367,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java">
+    <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
-          <folding />
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -366,13 +385,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/Client.java">
+    <entry file="file://$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.60402685">
-          <caret line="46" column="42" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.67785233">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

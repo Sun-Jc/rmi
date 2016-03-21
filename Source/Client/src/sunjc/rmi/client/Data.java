@@ -9,7 +9,8 @@ import java.io.Serializable;
 public class Data implements Serializable {
     public String dataType = "default";
     public Object value = null;
-    public Data(String s, Object v){
+
+    public Data(String s, Object v) {
         dataType = s;
         value = v;
     }

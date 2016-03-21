@@ -4,7 +4,6 @@ import sunjc.rmi.shared.Job;
 import sunjc.rmi.shared.Service;
 
 import java.util.AbstractCollection;
-import java.util.Collection;
 import java.util.Hashtable;
 
 /**
@@ -14,7 +13,7 @@ interface Strategy {
 
     void serverAddedAction(Service s); // single thread
 
-    SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service,String> servers, AbstractCollection jobs); // single thread, SchedulerThread
+    SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs); // single thread, SchedulerThread
 
     AbstractCollection<Job> jobsCollectionFactory(); // single thread
 
@@ -22,5 +21,5 @@ interface Strategy {
 
     void afterExecution(Service server, Job job); // multi-thread, execute()
 
-    void strategyChangedToThis(Hashtable<Service,String> servers);// when there is no job left
+    void strategyChangedToThis(Hashtable<Service, String> servers);// when there is no job left
 }

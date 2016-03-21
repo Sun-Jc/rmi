@@ -5,10 +5,17 @@ import sunjc.rmi.shared.Service;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created by SunJc on Mar/21/16.
+ *
+ * FIFO Strategy:  This scheduling strategy promises that if there is only one available server node,
+ *                  it will be allocated to the earliest coming job.
+ *
+ *                pick job according to FIFO, pick any possible available node
+ *                the real applying for node and the selection of node is up to SchedulerServer
+ *                i.e. any possible available node can be assigned to the job
+ *
  */
 public class FIFOScheduler implements Strategy {
 
@@ -28,7 +35,7 @@ public class FIFOScheduler implements Strategy {
 
 
     @Override
-    public SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service,String> servers, AbstractCollection jobs) {
+    public SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs) {
         SchedulerServer.PickedServerAndJob res = new SchedulerServer.PickedServerAndJob();
         // Pick up one server if available
         if (!availableServers.isEmpty()) {
@@ -37,7 +44,7 @@ public class FIFOScheduler implements Strategy {
             availableServers.remove(res.server);
             res.job = ((Queue<Job>) jobs).peek();
         } else {
-        // Or refill the available servers, without returning an available server
+            // Or refill the available servers, without returning an available server
             try {
                 // poll over
                 for (Service s : servers.keySet()) {
@@ -65,7 +72,7 @@ public class FIFOScheduler implements Strategy {
     }
 
     @Override
-    public void addJobToCollection(AbstractCollection<Job> jobs, Job job){
+    public void addJobToCollection(AbstractCollection<Job> jobs, Job job) {
         jobs.add(job);
     }
 
@@ -79,14 +86,14 @@ public class FIFOScheduler implements Strategy {
     }
 
     @Override
-    public void strategyChangedToThis(Hashtable<Service,String> servers) {
-        try{
+    public void strategyChangedToThis(Hashtable<Service, String> servers) {
+        try {
             for (Service s : servers.keySet()) {
                 if (!s.isBusy()) {
                     availableServers.add(s);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("FIFO strategy changed Exception encountered");
             e.printStackTrace();
         }

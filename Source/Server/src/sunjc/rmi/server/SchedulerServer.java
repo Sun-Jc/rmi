@@ -7,32 +7,67 @@ import java.rmi.RemoteException;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 
-/**
- * TBD: 1. Client interface, interact double directionly
- * 2. Multi-level scheduler
+/** It supports multilevel scheduling
+ *  E.g
+ *              SchedulerX
+ *              /      \ \
+ *         SchedulerY   \ \
+ *           /       \   \ ExecutorB
+ *       ExecutorC    \   \
+ *                    ExecutorA
+ *
+ * ****************************************************************************
+ * Critical Resources:
+ * <p>
+ * Mutual and solved by java thread safe type:
+ * <p>
+ * clientHistory, apply(add, x) - apply(add, x)
+ * <p>
+ * jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
+ * add in outer thread doesn't affect SchedulerThread check or remove logic
+ * <p>
+ * <p>
+ * Mutual and needn't be java thread safe type:
+ * <p>
+ * availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
+ * add in outer thread doesn't affect check empty or remove logic in SchedulerThread
+ * <p>
+ * <p>
+ * nodes, addServer(add, 1) - SchedulerThread(search, 1) - execute(fetch, x)
+ * no removing, add in outer thread doesn't affect searching
+ * <p>
+ * Mutual and can't be solved by java thread safe type:
+ * <p>
+ * appliedKeys; appliedServers, SchedulerThread(1, add)- execute(x, remove)
+ * pair, java thread safe version doesn't help mutual case
+ * Sync:
+ * 2.3.4.
+ * *****************************************************************************************************************
+ * Sync block:
+ * 1. Singleton: unique instance, mutual, getInstance()-getInstance()
+ * <p>
+ * Queuing Agent
+ * 2. Job block itself until server applied, sync, execute()-SchedulingTread
+ * <p>
+ * Consumer - Producer
+ * 3. Scheduler block itself until job comes in, sync, execute()-SchedulingTread
+ * 4. Scheduler block itself if job waiting until other job comes out, sync, execute()-SchedulingTread
+ * <p>
+ * 5. Server picker of job, mutual pairs
  * <p>
  * ****************************************************************************
  * Critical Resources:
- *
  * Mutual and solved by java thread safe type:
- *
  * clientHistory, apply(add, x) - apply(add, x)
- *
- * jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
- * add in outer thread doesn't affect SchedulerThread check or remove logic
- *
- *
- * Mutual and needn't be java thread safe type:
- *
  * availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
  * add in outer thread doesn't affect check empty or remove logic in SchedulerThread
- *
- *
+ * jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
+ * add in outer thread doesn't affect SchedulerThread check or remove logic
+ * Mutual and needn't be java thread safe type:
+ * <p>
  * nodes, addServer(add, 1) - SchedulerThread(search, 1) - execute(fetch, x)
  * no removing, add in outer thread doesn't affect searching
- *
  * Mutual and can't be solved by java thread safe type:
- *
  * appliedKeys; appliedServers, SchedulerThread(1, add)- execute(x, remove)
  * pair, java thread safe version doesn't help mutual case
  * Sync:
@@ -152,7 +187,6 @@ public class SchedulerServer extends CentralNode {
     /** End of Region: Properties **/
 
 
-
     /** Region: without strategy methods */
     @Override
     public int apply(String s) throws RemoteException {
@@ -166,7 +200,6 @@ public class SchedulerServer extends CentralNode {
         return false;
     }
     /** End of Region: without strategy methods */
-
 
 
     /**
@@ -251,10 +284,11 @@ public class SchedulerServer extends CentralNode {
             throw new IllegalStateException();
         }
 
+
         // wait, watch this order
         synchronized (job) {
             synchronized (jobs) {
-                strategy.addJobToCollection(jobs,job);
+                strategy.addJobToCollection(jobs, job);
                 jobs.notify();
             }
             try {
@@ -283,7 +317,7 @@ public class SchedulerServer extends CentralNode {
             beforeExecutePrompt(nodes.get(pickedServer), job.getName());
             res = pickedServer.execute(job, password);
             afterExecutePrompt(nodes.get(pickedServer), job.getName());
-            strategy.afterExecution(pickedServer,job);
+            strategy.afterExecution(pickedServer, job);
         } catch (Exception e) {
             System.err.println(name + ": Job passing exception encountered:");
             e.printStackTrace();

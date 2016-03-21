@@ -1,6 +1,8 @@
 package sunjc.rmi.server;
+
 import sunjc.rmi.shared.Job;
 import sunjc.rmi.shared.Service;
+
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Random;
@@ -11,7 +13,9 @@ import java.util.Stack;
  */
 public class Executor implements Service {
 
-    /** Fixed Params **/
+    /**
+     * Fixed Params
+     **/
     static final long maxWaitingTime = 60 * 1000;
     static final int FAILED = -1;
     /** End: Fixed Params**/
@@ -34,10 +38,12 @@ public class Executor implements Service {
     /** End of Region: Singleton **/
 
 
-    /** Region: property **/
+    /**
+     * Region: property
+     **/
     private String name;
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -47,17 +53,21 @@ public class Executor implements Service {
     }
 
     Stack<Job> jobHistory = new Stack<Job>();
-    public Stack<String> getJobHistory(){
+
+    public Stack<String> getJobHistory() {
         Stack<String> str = new Stack<>();
-        for (Job j: jobHistory){
+        for (Job j : jobHistory) {
             str.add(j.getName());
         }
         return str;
     }
+
     Stack<String> clientHistory = new Stack<>();
-    public Stack<String> getClientHistory(){
+
+    public Stack<String> getClientHistory() {
         return clientHistory;
     }
+
     Job jobPlaceHolder = new Job("job place holder") {
         @Override
         public Object doIt() {
@@ -67,34 +77,38 @@ public class Executor implements Service {
     /** End of Region: property **/
 
 
-    /** Region: hooks **/
-    private void someoneAsksPrompt(String client){
+    /**
+     * Region: hooks
+     **/
+    private void someoneAsksPrompt(String client) {
         System.out.println(name + ": " + client + " applies");
     }
 
-    private void someoneAsksQueuePrompt(String client){
+    private void someoneAsksQueuePrompt(String client) {
         System.out.println(name + ": " + client + "         and queues");
     }
 
-    private void someoneAsksFailedPrompt(String client){
+    private void someoneAsksFailedPrompt(String client) {
         System.out.println(name + ": " + client + "                     and fails");
     }
 
-    private void someoneAsksSuccessPrompt(String client){
+    private void someoneAsksSuccessPrompt(String client) {
         System.out.println(name + ": " + client + "                    and successes");
     }
 
-    private void beforeExecutePrompt(String job){
+    private void beforeExecutePrompt(String job) {
         System.out.println(name + ": " + "executing " + job);
     }
 
-    private void afterExecutePrompt(String job){
+    private void afterExecutePrompt(String job) {
         System.out.println(name + ": " + job + " done.");
     }
     /** End of Region: hooks **/
 
 
-    /** Region: States **/
+    /**
+     * Region: States
+     **/
     private Service availableState = new Service() {
         @Override
         public int apply(String s) throws RemoteException {
@@ -140,7 +154,8 @@ public class Executor implements Service {
     class ReadyToExecuteState implements Service {
         private Date startTime;
         private int key;
-        public void beginWaiting(int k){
+
+        public void beginWaiting(int k) {
             startTime = new Date();
             key = k;
         }
@@ -148,10 +163,12 @@ public class Executor implements Service {
         @Override
         public int apply(String s) throws RemoteException {
             Date now = new Date();
-            if(now.getTime()-startTime.getTime() > maxWaitingTime){
+            someoneAsksPrompt(s);
+            if (now.getTime() - startTime.getTime() > maxWaitingTime) {
                 currentState = availableState;
-                return this.apply(s);
-            }else {
+                return availableState.apply(s);
+            } else {
+                someoneAsksFailedPrompt(s);
                 return FAILED;
             }
         }
@@ -159,10 +176,10 @@ public class Executor implements Service {
         @Override
         public boolean isBusy() throws RemoteException {
             Date now = new Date();
-            if(now.getTime()-startTime.getTime() > maxWaitingTime){
+            if (now.getTime() - startTime.getTime() > maxWaitingTime) {
                 currentState = availableState;
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }
@@ -173,8 +190,8 @@ public class Executor implements Service {
             if (key == this.key) {
                 currentState = executingState;
                 executingState.setKey(key);
-                return this.execute(job, key);
-            }else {
+                return executingState.execute(job, key);
+            } else {
                 throw new IllegalStateException();
             }
 
@@ -182,11 +199,18 @@ public class Executor implements Service {
     }
 
     private ExecutingState executingState = new ExecutingState();
+
     class ExecutingState implements Service {
         int key;
-        void setKey(int k){ key = k;}
+
+        void setKey(int k) {
+            key = k;
+        }
+
         @Override
         public int apply(String s) throws RemoteException {
+            someoneAsksPrompt(s);
+            someoneAsksFailedPrompt(s);
             return FAILED;
         }
 
@@ -207,13 +231,17 @@ public class Executor implements Service {
             currentState = availableState;
             return res;
         }
-    };
+    }
+
+    ;
 
     private volatile Service currentState = availableState;
     /** End of Region: States **/
 
 
-    /** Region: apply for resource and execute **/
+    /**
+     * Region: apply for resource and execute
+     **/
     @Override
     public int apply(String clientName) throws RemoteException {
         return currentState.apply(clientName);
@@ -226,7 +254,7 @@ public class Executor implements Service {
 
     @Override
     public <T> T execute(Job<T> job, int key) throws RemoteException {
-        return currentState.execute(job,key);
+        return currentState.execute(job, key);
     }
     /** End of Region: apply for resource and execute **/
 }
