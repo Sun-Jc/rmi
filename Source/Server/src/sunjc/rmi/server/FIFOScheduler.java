@@ -14,7 +14,7 @@ public class FIFOScheduler implements Strategy {
 
     static final int TIMEOUT = 3 * 1000; // period of poll over when no node is available and jobs in need
 
-    ConcurrentSkipListSet<Service> availableServers = new ConcurrentSkipListSet<>();
+    HashSet<Service> availableServers = new HashSet<>();
 
     @Override
     public void serverAddedAction(Service s) {
@@ -23,7 +23,7 @@ public class FIFOScheduler implements Strategy {
 
     @Override
     public AbstractCollection<Job> jobsCollectionFactory() {
-        return new ConcurrentLinkedQueue<>(); // add safe FIFO queue
+        return new ConcurrentLinkedQueue<Job>(); // add safe FIFO queue
     }
 
 

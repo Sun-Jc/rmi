@@ -73,7 +73,7 @@ public class Main {
                 System.out.println("Manager: Central Node Running - " + args[1]);
 
 
-                String[] names = {};// {"Alpha", "Beta", "Gamma"};
+                String[] names = {"Alpha", "Beta", "Gamma"};
                 for (String s: names) {
                     Registry regForE = LocateRegistry.getRegistry("127.0.0.1");
                     Service executor = (Service) reg.lookup(s);

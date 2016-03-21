@@ -13,17 +13,26 @@ import java.util.ArrayList;
  * <p>
  * ****************************************************************************
  * Critical Resources:
+ *
  * Mutual and solved by java thread safe type:
+ *
  * clientHistory, apply(add, x) - apply(add, x)
- * availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
- * add in outer thread doesn't affect check empty or remove logic in SchedulerThread
+ *
  * jobs, SchedulerThread(remove, check empty, 1) - execute(add, x, lock already)
  * add in outer thread doesn't affect SchedulerThread check or remove logic
+ *
+ *
  * Mutual and needn't be java thread safe type:
- * <p>
+ *
+ * availableServers, addServer(1, add) - SchedulerThread(1, check empty, add, remove) - execute(x, add )
+ * add in outer thread doesn't affect check empty or remove logic in SchedulerThread
+ *
+ *
  * nodes, addServer(add, 1) - SchedulerThread(search, 1) - execute(fetch, x)
  * no removing, add in outer thread doesn't affect searching
+ *
  * Mutual and can't be solved by java thread safe type:
+ *
  * appliedKeys; appliedServers, SchedulerThread(1, add)- execute(x, remove)
  * pair, java thread safe version doesn't help mutual case
  * Sync:
@@ -109,6 +118,7 @@ public class SchedulerServer extends CentralNode {
     }
 
     private SchedulerServer() {
+        jobs = jobsFactory();
     }
     /** End of Region: Singleton **/
 

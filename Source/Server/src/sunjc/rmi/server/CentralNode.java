@@ -34,7 +34,7 @@ public abstract class CentralNode implements Service {
     }
 
     protected Hashtable<Service,String> nodes = nodesFactory();
-    protected AbstractCollection<Job> jobs = jobsFactory();
+    protected AbstractCollection<Job> jobs;
 
     protected Hashtable nodesFactory(){
         return new Hashtable<Service,String>();
