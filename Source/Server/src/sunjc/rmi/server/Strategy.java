@@ -13,7 +13,7 @@ interface Strategy {
 
     void serverAddedAction(Service s); // single thread
 
-    SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs); // single thread, SchedulerThread
+    DistributorWithSchedulerStrategy.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs); // single thread, SchedulerThread
 
     AbstractCollection<Job> jobsCollectionFactory(); // single thread
 

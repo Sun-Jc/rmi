@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 /** It supports multilevel scheduling
  *  E.g
- *              SchedulerX
+ *              DistributorX
  *              /      \ \
- *         SchedulerY   \ \
+ *       DistributorY   \ \
  *           /       \   \ ExecutorB
  *       ExecutorC    \   \
  *                    ExecutorA
@@ -126,7 +126,7 @@ import java.util.ArrayList;
 /**
  * Created by SunJc on Mar/20/16.
  */
-public class SchedulerServer extends CentralNode {
+public class DistributorWithSchedulerStrategy extends Distributor {
     /**
      * Fixed Params
      **/
@@ -138,13 +138,13 @@ public class SchedulerServer extends CentralNode {
     /**
      * Region: Singleton
      **/
-    private volatile static SchedulerServer uniqueInstance;
+    private volatile static DistributorWithSchedulerStrategy uniqueInstance;
 
-    public static SchedulerServer getInstance() {
+    public static DistributorWithSchedulerStrategy getInstance() {
         if (uniqueInstance == null) {
             synchronized (Executor.class) {
                 if (uniqueInstance == null) {
-                    uniqueInstance = new SchedulerServer();
+                    uniqueInstance = new DistributorWithSchedulerStrategy();
                     uniqueInstance.beginSchedulerThread();
                 }
             }
@@ -152,7 +152,7 @@ public class SchedulerServer extends CentralNode {
         return uniqueInstance;
     }
 
-    private SchedulerServer() {
+    private DistributorWithSchedulerStrategy() {
         jobs = jobsFactory();
     }
     /** End of Region: Singleton **/
@@ -205,7 +205,6 @@ public class SchedulerServer extends CentralNode {
     /**
      * Region: Strategy
      **/
-
     static Strategy DEAFULT_STRATEGY = new FIFOScheduler();
 
     Strategy strategy = DEAFULT_STRATEGY;

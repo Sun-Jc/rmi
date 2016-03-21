@@ -2,36 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9f9d9597-aa5a-49f5-b321-438f47f5b538" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/NotifyReceiver.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/CentralNode.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/CentralNode.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Client.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Client.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Data.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/Data.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$1.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$2.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ExecutingState.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ExecutingState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ReadyToExecuteState.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor$ReadyToExecuteState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Executor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/FIFOScheduler.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/FIFOScheduler.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Main.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/MrJobLovesSleeping.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/client/MrJobLovesSleeping.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$1.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$PickedServerAndJob.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer$PickedServerAndJob.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer.class" afterPath="$PROJECT_DIR$/../../Bin/sunjc/rmi/server/SchedulerServer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Jobs/jobz.jar" afterPath="$PROJECT_DIR$/../../Jobs/jobz.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Lib/util.jar" afterPath="$PROJECT_DIR$/../../Lib/util.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/CentralNode.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/CentralNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/Data.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/Data.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Executor.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Executor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/DistributorWithSchedulerStrategy.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/DistributorWithSchedulerStrategy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/FIFOScheduler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/Job.java" afterPath="$PROJECT_DIR$/../Shared/src/sunjc/rmi/shared/Job.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java" afterPath="$PROJECT_DIR$/src/sunjc/rmi/client/MrJobLovesSleeping.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/SchedulerServer.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/SchedulerServer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" afterPath="$PROJECT_DIR$/../Server/src/sunjc/rmi/server/Strategy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Server/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Server/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Shared/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Shared/.idea/workspace.xml" />
     </list>
     <ignored path="Client.iws" />
     <ignored path=".idea/workspace.xml" />

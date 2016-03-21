@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *                  it will be allocated to the earliest coming job.
  *
  *                pick job according to FIFO, pick any possible available node
- *                the real applying for node and the selection of node is up to SchedulerServer
+ *                the real applying for node and the selection of node is up to DistributorWithSchedulerStrategy
  *                i.e. any possible available node can be assigned to the job
  *
  */
@@ -35,8 +35,8 @@ public class FIFOScheduler implements Strategy {
 
 
     @Override
-    public SchedulerServer.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs) {
-        SchedulerServer.PickedServerAndJob res = new SchedulerServer.PickedServerAndJob();
+    public DistributorWithSchedulerStrategy.PickedServerAndJob pickServerAndJobIfJobNotExecuted(Hashtable<Service, String> servers, AbstractCollection jobs) {
+        DistributorWithSchedulerStrategy.PickedServerAndJob res = new DistributorWithSchedulerStrategy.PickedServerAndJob();
         // Pick up one server if available
         if (!availableServers.isEmpty()) {
             Iterator<Service> it = availableServers.iterator();

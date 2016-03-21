@@ -12,7 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 2) {
-            System.out.println("Usages: -type of server (e or c) -server name(s)");
+            System.out.println("Usages: -type of server (e for executor, d for distributor) -server name(s)");
             return;
         }
 
@@ -63,35 +63,35 @@ public class Main {
                     }
                 }
 
-            } else if (args[0].toLowerCase().equals("c")) {
-                CentralNode center = SchedulerServer.getInstance();
+            } else if (args[0].toLowerCase().equals("d")) {
+                Distributor center = DistributorWithSchedulerStrategy.getInstance();
                 center.setName(args[1]);
 
                 Service stubInstance = (Service) UnicastRemoteObject.exportObject(center, 0);
                 Registry reg = LocateRegistry.getRegistry();
                 reg.rebind(args[1], stubInstance);
 
-                System.out.println("Manager: Central Node Running - " + args[1]);
+                System.out.println("Manager: Distributor Running - " + args[1]);
 
 
                 String[] names = {"Alpha", "Beta", "Gamma"};
                 for (String s : names) {
                     Registry regForE = LocateRegistry.getRegistry("127.0.0.1");
-                    Service executor = (Service) reg.lookup(s);
+                    Service executor = (Service) regForE.lookup(s);
                     center.addServer(executor, s);
-                    System.out.println("Manager: executor " + s + " added to " + center);
+                    System.out.println("Manager: node " + s + " added to " + center);
                 }
 
 
                 Scanner in = new Scanner(System.in);
                 while (true) {
-                    System.out.println("Manager: What are you going to do? 1. View Client History 2. Add new executors");
+                    System.out.println("Manager: What are you going to do? 1. View Client History 2. Add new nodes");
                     String input = in.next();
                     if (input.equals("1")) {
                         dispHistory(center.getClientHistory(), "Clients who visited");
                     } else if (input.equals("2")) {
 
-                        System.out.println("Manager: Ready to add new executors for Scheduler: -host name -service name");
+                        System.out.println("Manager: Ready to add new nodes for Distributor: -host name -service name");
                         String hostLocation = in.next();
 
                         String serverName = in.next();
@@ -100,16 +100,16 @@ public class Main {
                         if (in.next().toLowerCase().equals("y")) {
 
                             Registry regForE = LocateRegistry.getRegistry(hostLocation);
-                            Service executor = (Service) reg.lookup(serverName);
+                            Service executor = (Service) regForE.lookup(serverName);
                             center.addServer(executor, serverName);
 
-                            System.out.println("Manager: executor " + serverName + " added to " + center);
+                            System.out.println("Manager: node " + serverName + " added to " + center);
                         }
                     }
                 }
 
             } else {
-                System.out.println("no such server");
+                System.out.println("no such kind");
             }
         } catch (Exception e) {
             System.err.println("Manager exception encountered:");

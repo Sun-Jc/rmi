@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * Created by SunJc on Mar/20/16.
  */
-public abstract class CentralNode implements Service {
+public abstract class Distributor implements Service {
 
     protected String name;
 
